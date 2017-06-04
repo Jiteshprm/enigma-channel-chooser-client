@@ -57,3 +57,8 @@ typings/
 # dotenv environment variables file
 .env
 
+
+.idea/enigma-channel-chooser-client.iml
+.idea/misc.xml
+.idea/modules.xml
+.idea/workspace.xml
