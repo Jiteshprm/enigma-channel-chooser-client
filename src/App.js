@@ -91,34 +91,61 @@ class EnigmaServiceListItem extends Component {
 
 
     render() {
+        function myFunction(reference, name) {
+            var link="http://127.0.0.1:3001/api/enigma-service-selector?service_reference=" + reference + "&service_name=" + name
+            console.log(link)
+        }
         return (
-/*            <li>
-                <a href={"#employees/" + this.props.reference}>
-                    {this.props.name}
-                </a>
-            </li>*/
+            /*            <li>
+             <a href={"#employees/" + this.props.reference}>
+             {this.props.name}
+             </a>
+             </li>*/
 
             /*<Panel header={this.props.name} eventKey={this.props.index}>{this.props.reference}</Panel>*/
 
-            <ListGroupItem href={"http://127.0.0.1:3001/api/enigma-service-selector?service_reference=" + this.props.reference + "&service_name=" + this.props.name}>{this.props.name}</ListGroupItem>
+            /*<ListGroupItem href={"http://127.0.0.1:3001/api/enigma-service-selector?service_reference=" + this.props.reference + "&service_name=" + this.props.name}>{this.props.name}</ListGroupItem>*/
+            <ListGroupItem onClick={() =>myFunction(this.props.reference, this.props.name)}>{this.props.name}</ListGroupItem>
         );
     }
 };
 
 class EnigmaServiceList extends Component {
+
     render() {
+        function alertClicked() {
+            alert('You clicked the third ListGroupItem');
+        }
+        function myFunction(a) {
+            console.log(a)
+        }
         var i=0
         var items = this.props.e2service.map(function (e2service) {
             return (
                 <EnigmaServiceListItem key={i} reference={e2service.e2servicereference} name={e2service.e2servicename} index={i++} />
             );
         });
+        var items2 = <ListGroupItem onClick={alertClicked}>
+            Trigger an alert2
+        </ListGroupItem>
+
+        var items3 = <ListGroupItem onClick={alertClicked}>
+            Trigger an alert3
+        </ListGroupItem>
+
+
         return (
             //<ul>
             //    {items}
             //</ul>
             <ListGroup>
                 {items}
+                {items2}
+                {items3}
+
+                <ListGroupItem onClick={alertClicked}>
+                    Trigger an alert
+                </ListGroupItem>
             </ListGroup>
         );
     }
@@ -163,51 +190,62 @@ class App extends Component {
     componentDidMount (){
 
         var th = this;
-            axios.get("http://127.0.0.1:3001/api/enigma-get-all-services" , {
+        axios.get("http://127.0.0.1:3001/api/enigma-get-all-services" , {
             timeout: 5000
         })
-                .then(function(result) {
+            .then(function(result) {
                     th.setState({
                         e2service: result.data.e2servicelist.e2service
-                            //.map(x => {a:x.e2servicename; b:x.e2servicereference})
+                        //.map(x => {a:x.e2servicename; b:x.e2servicereference})
                         //.map(x => x.e2servicename)
                     });
 
                 }
-                )
+            )
     }
 
     getXmlEnigma() {
 
     }
 
-  render() {
-      var employees = [
-          {firstName: 'Christophe', lastName: 'Coenraets', id:1},
-          {firstName: 'Lisa', lastName: 'Jones', id:2},
-          {firstName: 'John', lastName: 'Smith', id:3}
-      ];
-    return (
+    render() {
+        var employees = [
+            {firstName: 'Christophe', lastName: 'Coenraets', id:1},
+            {firstName: 'Lisa', lastName: 'Jones', id:2},
+            {firstName: 'John', lastName: 'Smith', id:3}
+        ];
+        function alertClicked() {
+            alert('You clicked the third ListGroupItem');
+        }
+        return (
 
-      <div className="App">
-        <div className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <h2>Welcome to React</h2>
-        </div>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-            {    console.log(this.state.e2service)}
-            <EmployeeList employees={employees}/>
+            <div className="App">
+                <div className="App-header">
+                    <img src={logo} className="App-logo" alt="logo" />
+                    <h2>Welcome to React</h2>
+                </div>
+                <p className="App-intro">
+                    To get started, edit <code>src/App.js</code> and save to reload.
+                    {    console.log(this.state.e2service)}
+                    {/*<EmployeeList employees={employees}/>*/}
 
 
 
-        </p>
-          <EnigmaServiceList e2service={this.state.e2service}/>
+                </p>
+                <EnigmaServiceList e2service={this.state.e2service}/>
 
-          <AppComponent/>
-      </div>
-    );
-  }
+                <AppComponent/>
+
+                <ListGroup>
+                    <ListGroupItem href="#link1">Link 1</ListGroupItem>
+                    <ListGroupItem href="#link2">Link 2</ListGroupItem>
+                    <ListGroupItem onClick={alertClicked}>
+                        Trigger an alert
+                    </ListGroupItem>
+                </ListGroup>
+            </div>
+        );
+    }
 }
 
 export default App;
