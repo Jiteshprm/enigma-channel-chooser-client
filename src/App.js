@@ -244,10 +244,11 @@ class App extends Component {
 
 
                 </p>
+                <div id="channelsall">
                 <EnigmaServiceList e2service={this.state.e2service}/>
 
                 <AppComponent/>
-
+                </div>
 
                 <div id="channels">
                 </div>
