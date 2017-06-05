@@ -6,6 +6,7 @@ import { Panel } from 'react-bootstrap';
 import { PanelGroup } from 'react-bootstrap';
 import { ListGroupItem } from 'react-bootstrap';
 import { ListGroup } from 'react-bootstrap';
+import ReactDOM from 'react-dom';
 
 
 class AppComponent extends React.Component {
@@ -94,6 +95,17 @@ class EnigmaServiceListItem extends Component {
         function myFunction(reference, name) {
             var link="http://127.0.0.1:3001/api/enigma-service-selector?service_reference=" + reference + "&service_name=" + name
             console.log(link)
+            var th = this;
+            axios.get(link , {
+                timeout: 5000
+            }).then(function(result) {
+                    console.log(result.data.e2servicelist.e2service)
+
+                    const children = <EnigmaServiceList e2service={result.data.e2servicelist.e2service}/>
+                    console.log(children)
+                    ReactDOM.render(children, document.getElementById('channels'));
+                }
+                )
         }
         return (
             /*            <li>
@@ -236,13 +248,9 @@ class App extends Component {
 
                 <AppComponent/>
 
-                <ListGroup>
-                    <ListGroupItem href="#link1">Link 1</ListGroupItem>
-                    <ListGroupItem href="#link2">Link 2</ListGroupItem>
-                    <ListGroupItem onClick={alertClicked}>
-                        Trigger an alert
-                    </ListGroupItem>
-                </ListGroup>
+
+                <div id="channels">
+                </div>
             </div>
         );
     }
