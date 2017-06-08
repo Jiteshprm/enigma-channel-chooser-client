@@ -92,18 +92,24 @@ class EnigmaServiceListItem extends Component {
 
 
     render() {
-        function myFunction(reference, name) {
-            var link="http://127.0.0.1:3001/api/enigma-service-selector?service_reference=" + reference + "&service_name=" + name
+        function myFunction(reference, name, phases, current_phase) {
+            //var link="http://127.0.0.1:3001/api/enigma-service-selector?service_reference=" + reference + "&service_name=" + name
+console.log("phases",phases.phases)
+            console.log("current_phase",current_phase)
+            console.log("phases1",phases.phases[0])
+            console.log("phases2",phases.phases[current_phase].url)
+            var link="http://127.0.0.1:3001" + phases.phases[current_phase].url +"?service_reference=" + reference + "&service_name=" + name
+
             console.log(link)
             var th = this;
             axios.get(link , {
                 timeout: 5000
             }).then(function(result) {
-                    console.log(result.data.e2servicelist.e2service)
+                    console.log(result.data.payload.e2servicelist.e2service)
 
-                    const children = <EnigmaServiceList e2service={result.data.e2servicelist.e2service}/>
+                    const children = <EnigmaServiceList e2service={result.data} phase={current_phase} phases={phases}/>
                     console.log(children)
-                    ReactDOM.render(children, document.getElementById('channels'));
+                    ReactDOM.render(children, document.getElementById('services'));
                 }
                 )
         }
@@ -117,7 +123,7 @@ class EnigmaServiceListItem extends Component {
             /*<Panel header={this.props.name} eventKey={this.props.index}>{this.props.reference}</Panel>*/
 
             /*<ListGroupItem href={"http://127.0.0.1:3001/api/enigma-service-selector?service_reference=" + this.props.reference + "&service_name=" + this.props.name}>{this.props.name}</ListGroupItem>*/
-            <ListGroupItem onClick={() =>myFunction(this.props.reference, this.props.name)}>{this.props.name}</ListGroupItem>
+            <ListGroupItem onClick={() =>myFunction(this.props.reference, this.props.name, this.props.phases, this.props.current_phase)}>{this.props.name}</ListGroupItem>
         );
     }
 };
@@ -132,11 +138,21 @@ class EnigmaServiceList extends Component {
             console.log(a)
         }
         var i=0
-        var items = this.props.e2service.map(function (e2service) {
+        var phases=this.props.phases
+        var current_phase=this.props.phase
+
+        //var x=this.props.e2service.payload
+
+        console.log("rthis.props.e2service",this.props,Object.prototype.toString.call(this.props.e2service))
+        console.log("rthis.props.phases",this.props.phases,Object.prototype.toString.call(this.props.phases))
+        console.log("rthis.props.e2service.payload",this.props.e2service.payload,Object.prototype.toString.call(this.props.e2service.payload))
+        console.log("this.props.e2service.payload.e2servicelist",this.props.e2service.payload.e2servicelist,Object.prototype.toString.call(this.props.e2service.payload.e2servicelist))
+        var items = this.props.e2service.payload.e2servicelist.e2service.map(function (e2service) {
             return (
-                <EnigmaServiceListItem key={i} reference={e2service.e2servicereference} name={e2service.e2servicename} index={i++} />
+                <EnigmaServiceListItem key={i} reference={e2service.e2servicereference} name={e2service.e2servicename} index={i++} phases={phases} current_phase={current_phase}/>
             );
         });
+
         var items2 = <ListGroupItem onClick={alertClicked}>
             Trigger an alert2
         </ListGroupItem>
@@ -195,25 +211,45 @@ class App extends Component {
 
         this.state = {
             e2service: [],
-            open: true
+            open: true,
+            current_phase: 0
         };
     }
 
-    componentDidMount (){
+    componentWillMount (){
 
         var th = this;
-        axios.get("http://127.0.0.1:3001/api/enigma-get-all-services" , {
+
+        axios.get("http://127.0.0.1:3001/api/enigma-get-phases" , {
             timeout: 5000
         })
             .then(function(result) {
                     th.setState({
-                        e2service: result.data.e2servicelist.e2service
-                        //.map(x => {a:x.e2servicename; b:x.e2servicereference})
-                        //.map(x => x.e2servicename)
+                        phases: result.data
                     });
 
+                    console.log("http://127.0.0.1:3001" + th.state.phases.phases[th.state.current_phase].url )
+                axios.get("http://127.0.0.1:3001" + th.state.phases.phases[th.state.current_phase].url  , {
+                    timeout: 5000
+                })
+                    .then(function(result2) {
+                            th.setState({
+                                e2service: result2.data,
+                                current_phase: th.state.current_phase+=1
+                            });
+
+                        console.log("result2.data.payload",result2.data.payload,Object.prototype.toString.call(result2.data.payload))
+                        console.log("result2.data.payload.e2servicelist",result2.data.payload.e2servicelist,Object.prototype.toString.call(result2.data.payload.e2servicelist))
+                        console.log("result2.data.payload.e2servicelist.e2service",result2.data.payload.e2servicelist.e2service,Object.prototype.toString.call(result2.data.payload.e2servicelist.e2service))
+                        console.log("result2.data.payload",result2.data,Object.prototype.toString.call(result2.data))
+                        var x=<EnigmaServiceList e2service={th.state.e2service} phase={th.state.current_phase} phases={th.state.phases}/>
+                        ReactDOM.render(x, document.getElementById('channels'));
+                        }
+                    )
                 }
             )
+
+
     }
 
     getXmlEnigma() {
@@ -238,14 +274,14 @@ class App extends Component {
                 </div>
                 <p className="App-intro">
                     To get started, edit <code>src/App.js</code> and save to reload.
-                    {    console.log(this.state.e2service)}
+                    {    console.log("this.state.e2service",this.state.e2service)}
                     {/*<EmployeeList employees={employees}/>*/}
 
 
 
                 </p>
-                <div id="channelsall">
-                <EnigmaServiceList e2service={this.state.e2service}/>
+                <div id="services">
+
 
                 <AppComponent/>
                 </div>
