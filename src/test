@@ -1,0 +1,17 @@
+        var i=0
+        var items = this.props.e2service.map(e2service=>
+                //<EnigmaServiceListItem key={i} reference={e2service.e2servicereference} name={e2service.e2servicename} index={i++} />
+                <ListGroupItem onClick={myFunction(e2service.e2servicename )}>{e2service.e2servicename}</ListGroupItem>
+            );
+        });
+
+
+                    <ListGroup>
+                        {items[0]}
+                        {items2}
+                        {items3}
+
+                        <ListGroupItem onClick={alertClicked}>
+                            Trigger an alert
+                        </ListGroupItem>
+                    </ListGroup>
