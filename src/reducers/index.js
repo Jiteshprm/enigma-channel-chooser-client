@@ -1,9 +1,11 @@
 import { combineReducers } from 'redux'
 import getSTBInfo from './getSTBInfo'
+import stbListReducer from './stb-list-reducer'
+
 
 
 const todoApp = combineReducers({
-    getSTBInfo
+    stbListReducer
 })
 
 export default todoApp

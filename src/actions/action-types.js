@@ -1,0 +1,5 @@
+// STB actions
+export const GET_ALL_PHASES = 'GET_ALL_PHASES';
+export const DELETE_USER_SUCCESS = 'DELETE_USER_SUCCESS';
+export const USER_PROFILE_SUCCESS = 'USER_PROFILE_SUCCESS';
+
