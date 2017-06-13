@@ -10,7 +10,7 @@ let AddTodo = ({ users, dispatch }) => {
 
   return (
 
-        <div onClick={() => stbApi.getPhases()}>
+        <div onClick={() => stbApi.getAllPhases()}>
       aaaa
 
     </div>
