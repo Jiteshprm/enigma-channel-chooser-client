@@ -5,7 +5,13 @@ const initialState = {
     current_phase: -1,
   phases: [],
     bouquets: [],
-    services: []
+    services: [],
+    channel: [],
+    run: [],
+    current_channel_name: [],
+    current_channel_reference: [],
+    current_bouquet_reference: [],
+    current_bouquet_name: [],
 };
 
 const stbListReducer = function(state = initialState, action) {
@@ -18,9 +24,14 @@ const stbListReducer = function(state = initialState, action) {
       case types.GET_ALL_BOUQUETS:
           return Object.assign({}, state, { bouquets: action.bouquetList, current_phase:1 });
 
-      case types.GET_ALL_SERVICES_IN_BOUQUETS:
-          return Object.assign({}, state, { services: action.channelList, current_phase:2 });
+      case types.GET_ALL_CHANNELS:
+          return Object.assign({}, state, { services: action.channelList.payload,current_bouquet_reference:action.channelList.service_reference, current_bouquet_name:action.channelList.service_name , current_phase:2 });
 
+      case types.CHOOSE_CHANNEL:
+          return Object.assign({}, state, { channel: action.channelSelectSuccess, current_phase:3 });
+
+      case types.RUN_CHANNEL:
+          return Object.assign({}, state, { run: action.runChannelSuccess, current_phase:4 });
   }
 
   return state;

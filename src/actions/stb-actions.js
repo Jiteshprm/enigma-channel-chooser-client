@@ -14,9 +14,23 @@ export function getAllBouquetsSuccess(bouquetList) {
     };
 }
 
-export function getAllChannelsSuccess(bouquetList) {
+export function getAllChannelsSuccess(channelList) {
     return {
         type: types.GET_ALL_CHANNELS,
         channelList
+    };
+}
+
+export function selectChannelSuccess(channelSelectSuccess) {
+    return {
+        type: types.CHOOSE_CHANNEL,
+        channelSelectSuccess
+    };
+}
+
+export function runChannelSuccess(runChannelSuccess) {
+    return {
+        type: types.RUN_CHANNEL,
+        runChannelSuccess
     };
 }
