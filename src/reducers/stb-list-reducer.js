@@ -4,7 +4,8 @@ import _ from 'lodash';
 const initialState = {
     current_phase: -1,
   phases: [],
-    bouquets: []
+    bouquets: [],
+    services: []
 };
 
 const stbListReducer = function(state = initialState, action) {
@@ -16,6 +17,9 @@ const stbListReducer = function(state = initialState, action) {
 
       case types.GET_ALL_BOUQUETS:
           return Object.assign({}, state, { bouquets: action.bouquetList, current_phase:1 });
+
+      case types.GET_ALL_SERVICES_IN_BOUQUETS:
+          return Object.assign({}, state, { services: action.channelList, current_phase:2 });
 
   }
 

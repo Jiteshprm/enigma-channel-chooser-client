@@ -13,3 +13,10 @@ export function getAllBouquetsSuccess(bouquetList) {
         bouquetList
     };
 }
+
+export function getAllChannelsSuccess(bouquetList) {
+    return {
+        type: types.GET_ALL_CHANNELS,
+        channelList
+    };
+}

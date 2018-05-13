@@ -25,3 +25,13 @@ export function getAllBouquets() {
             return response;
         });
 }
+
+export function getServicesFromBouquets() {
+    var actual_state=store.getState().stbListReducer;
+    return axios.get(actual_state.phases[actual_state.current_phase].url)
+        .then(response => {
+            store.dispatch(getAllBouquetsSuccess(response.data.payload));
+            console.log("response.data.payload",response.data.payload)
+            return response;
+        });
+}
